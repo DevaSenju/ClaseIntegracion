@@ -1,0 +1,11 @@
+[
+    {
+        "id": 1,
+        "sku": "1",
+        "name": "Lapiz",
+        "price": 500,
+        "active": true,
+        "created_at": "2026-05-23 12:52:45",
+        "updated_at": "2026-05-23 12:52:45"
+    }
+]
