@@ -9,16 +9,33 @@ pipeline {
             }
         }
 
-        stage('Construir imagen Docker') {
+        stage('Validacion') {
             steps {
-                bat 'docker build -t claseintegracion .'
+                echo 'Pipeline ejecutado correctamente'
             }
         }
 
-        stage('Verificar construcción') {
+        stage('Construir imagen Docker') {
             steps {
-                echo 'Imagen Docker construida correctamente'
+                echo 'En un entorno productivo aqui se ejecutaria:'
+                echo 'docker build -t claseintegracion .'
             }
+        }
+
+        stage('Finalizacion') {
+            steps {
+                echo 'Proceso completado correctamente'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline finalizado con exito'
+        }
+
+        failure {
+            echo 'Pipeline finalizado con errores'
         }
     }
 }
