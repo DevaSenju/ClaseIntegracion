@@ -3,39 +3,50 @@ pipeline {
 
     stages {
 
-        stage('Clonar repositorio') {
+        stage('Checkout') {
             steps {
-                echo 'Repositorio obtenido desde GitHub'
-            }
-        }
-
-        stage('Validacion') {
-            steps {
-                echo 'Pipeline ejecutado correctamente'
+                checkout scm
             }
         }
 
         stage('Construir imagen Docker') {
             steps {
-                echo 'En un entorno productivo aqui se ejecutaria:'
-                echo 'docker build -t claseintegracion .'
+                sh 'docker build -t claseintegracion .'
             }
         }
 
-        stage('Finalizacion') {
+        stage('Validar imagen') {
             steps {
-                echo 'Proceso completado correctamente'
+                sh 'docker images | grep claseintegracion'
+            }
+        }
+
+        stage('Eliminar contenedor anterior') {
+            steps {
+                sh 'docker rm -f claseintegracion-test || true'
+            }
+        }
+
+        stage('Crear contenedor de prueba') {
+            steps {
+                sh 'docker run -d --name claseintegracion-test -p 8082:80 claseintegracion'
+            }
+        }
+
+        stage('Validar contenedor') {
+            steps {
+                sh 'docker ps | grep claseintegracion-test'
             }
         }
     }
 
     post {
         success {
-            echo 'Pipeline finalizado con exito'
+            echo 'Imagen Docker construida y contenedor creado correctamente'
         }
 
         failure {
-            echo 'Pipeline finalizado con errores'
+            echo 'Error durante la ejecucion del pipeline'
         }
     }
 }
