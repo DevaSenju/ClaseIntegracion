@@ -1,0 +1,4 @@
+app:
+  build:
+    image: claseintegracion
+    dockerfile: Dockerfile
